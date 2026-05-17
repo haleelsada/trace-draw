@@ -1,0 +1,165 @@
+#root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #000;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+.app-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload-screen {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.upload-button {
+  background: #3498db;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.image-canvas {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.image-canvas img {
+  max-width: none;
+  user-select: none;
+  transition: transform 0.05s linear, filter 0.2s ease;
+}
+
+.controls {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(15px);
+  z-index: 1000;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  pointer-events: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.controls.bottom-left {
+  bottom: 15px;
+  left: 15px;
+}
+
+.controls.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.controls.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.control-section.row {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.label {
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  letter-spacing: 1px;
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.value {
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 40px;
+  text-align: center;
+}
+
+.controls button, .mini-upload, .toggle-btn {
+  height: 36px;
+  border: none;
+  background: #fff;
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-group button {
+  width: 36px;
+  border-radius: 0;
+}
+
+.controls button:active {
+  background: #ccc;
+}
+
+.lock-button, .toggle-btn {
+  flex: 1;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.toggle-btn.active {
+  background: #f1c40f;
+  color: black;
+}
+
+.lock-button.is-locked {
+  background: #e74c3c;
+  color: white;
+}
+
+.mini-upload {
+  font-size: 11px;
+  background: #34495e;
+  color: white;
+  width: 100%;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.image-canvas.locked {
+  pointer-events: none;
+}
