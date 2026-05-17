@@ -16,6 +16,8 @@ function App() {
   const [showControls, setShowControls] = useState(true);
   const [contrast, setContrast] = useState(100);
   const [isGrayscale, setIsGrayscale] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [showUrlInput, setShowUrlInput] = useState(false);
 
   const controlsTimeoutRef = useRef<number | null>(null);
 
@@ -25,16 +27,9 @@ function App() {
       window.clearTimeout(controlsTimeoutRef.current);
     }
     controlsTimeoutRef.current = window.setTimeout(() => {
-      setShowControls(false);
-    }, 4000); // 4 seconds for more time
+      if (!showUrlInput) setShowControls(false);
+    }, 4000);
   };
-
-  useEffect(() => {
-    resetControlsTimer();
-    return () => {
-      if (controlsTimeoutRef.current) window.clearTimeout(controlsTimeoutRef.current);
-    };
-  }, []);
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -49,6 +44,18 @@ function App() {
         resetControlsTimer();
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUrlImport = () => {
+    if (imageUrl.trim()) {
+      setImage(imageUrl.trim());
+      setScale(1);
+      setPosition({ x: 0, y: 0 });
+      setContrast(100);
+      setIsGrayscale(false);
+      setShowUrlInput(false);
+      resetControlsTimer();
     }
   };
 
@@ -103,11 +110,27 @@ function App() {
       {!image && (
         <div className="upload-screen">
           <h1>Trace Draw</h1>
-          <p>Upload an image to start tracing</p>
-          <label className="upload-button">
-            Choose Image
-            <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
-          </label>
+          <p>Upload or paste a link to start tracing</p>
+          
+          <div className="upload-options">
+            <label className="upload-button main">
+              Choose Image
+              <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
+            </label>
+            
+            <div className="url-input-container">
+              <input 
+                type="text" 
+                placeholder="https://image-url.com/photo.jpg" 
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                className="url-input"
+              />
+              <button className="upload-button secondary" onClick={handleUrlImport}>
+                Import URL
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -135,9 +158,9 @@ function App() {
             <div className="control-section">
               <span className="label">Zoom</span>
               <div className="btn-group">
-                <button onClick={() => handleZoom(0.02)}>+</button>
+                <button onClick={() => handleZoom(0.05)}>+</button>
                 <span className="value">{(scale * 100).toFixed(0)}%</span>
-                <button onClick={() => handleZoom(-0.02)}>-</button>
+                <button onClick={() => handleZoom(-0.05)}>-</button>
               </div>
             </div>
 
@@ -165,10 +188,22 @@ function App() {
               </button>
             </div>
 
-            <label className="mini-upload">
-              New Image
-              <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
-            </label>
+            <div className="mini-upload-group">
+              <label className="mini-upload">
+                Upload
+                <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
+              </label>
+              <button className="mini-upload" onClick={() => {
+                const url = prompt('Enter image URL:');
+                if (url) {
+                  setImage(url);
+                  setScale(1);
+                  setPosition({ x: 0, y: 0 });
+                }
+              }}>
+                URL
+              </button>
+            </div>
           </div>
         </>
       )}
